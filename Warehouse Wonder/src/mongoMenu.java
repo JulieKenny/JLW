@@ -1,13 +1,5 @@
-import com.mongodb.AggregationOptions;
-import com.mongodb.AggregationOutput;
-import com.mongodb.BasicDBObject;
-import com.mongodb.BasicDBObjectBuilder;
-import com.mongodb.Cursor;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
+import com.mongodb.*;
+
 
 import java.net.UnknownHostException;
 //import java.util.Arrays;
@@ -15,10 +7,13 @@ import java.net.UnknownHostException;
 
 public class mongoMenu {
 	
-	 int menuItemCount = 0;
-	 int menuLength = 10;
+	 //int menuItemCount = 0;
+	 //int menuLength = 10;
+	 int maxMenus = 15;
 	 int menuId ;
 	 String menuTitle  = new String();
+	 String menuItem[] = new String[15];
+	 int menuItemCount ;
 	
 	 int returnMenu(int menuId){
 		 int result = 0;
@@ -43,7 +38,7 @@ public class mongoMenu {
 	     BasicDBObject fields = new BasicDBObject();
 		 fields.put("menuTitle",1);	   
 		 fields.put("menuId", 1);
-		 fields.put("scriptId",1);
+		 fields.put("concernId",1);
 		 fields.put("_id", 0);
 
 		 try {
@@ -57,12 +52,34 @@ public class mongoMenu {
 		 } catch (Exception e){
 			 return 1;
 		 }
+
+	     mongoClient.close();
+	   return 0;    
+
+}		
+	 public int addConcernItem(int addConcernId) throws UnknownHostException {
+		 MongoClient mongoClient = new MongoClient("localhost",27017);
+	     DB db = mongoClient.getDB("local");
+	     DBCollection coll = db.getCollection("customMenus");
+	     
+	     BasicDBObject query = new BasicDBObject();
+		 query.put("menuTitle","Concerns");	   
+		 query.put("menuId", "C1");
+		 query.put("concernId", addConcernId);
+
+		 try {
+		    coll.insert(query);	    
+		    
+		 } catch (Exception e){
+			 return 1;
+		 }
 		
 	     //clean up
 	     mongoClient.close();
-	   return 0;  
-
-}		
+	   return 0;    
+	     
+		 
+	 }
 	  
 
 		 

@@ -70,7 +70,7 @@ public class menuEditFrame extends JFrame
 		getContentPane().add(menuManagerLayout);
 		this.setVisible(true);	
 		
-		String allScripts[] = new String[100];
+		String allScripts[][] = new String[100][2];
 		validationScript scriptListSet = new validationScript();
 		allScripts = scriptListSet.listall(); 
 		scriptListModel.clear();
@@ -80,7 +80,7 @@ public class menuEditFrame extends JFrame
 		  {
 			 if (allScripts[i] != null )
 			 {
-		       scriptListModel.addElement(allScripts[i]);
+		       scriptListModel.addElement(allScripts[i][1]);
 			 }
 		  }
 		int menuCount;

@@ -13,12 +13,16 @@ import java.net.UnknownHostException;
 //import java.util.Arrays;
 //import java.util.List;
 
+import javax.swing.JOptionPane;
+
 public class mongoMenuSet {
 	
 	 int menuItemCount = 0;
 	 int menuLength = 10;
 	 int menuId [] = new int[menuLength];
 	 String menuTitle [] = new String[menuLength];
+	 mongoMenu customMenu[] = new mongoMenu[5];
+	 int menuCount = 0;
 	
 	 int returnAllMenus(){
 		 int result = 0;
@@ -32,56 +36,72 @@ public class mongoMenuSet {
 	  
 	 int readAllCustomMenus() throws UnknownHostException {
 
-		
 		 MongoClient mongoClient = new MongoClient("localhost",27017);
-		 int menuCount = 0;
+
 	
 	     // get handle to "mydb"
 	     DB db = mongoClient.getDB("local");
 
 	     DBCollection coll = db.getCollection("customMenus");
-	     //DBObject myDoc = coll.findOne();
 	     
 	  // get all the documents in the collection and print them out
 	     BasicDBObject query = new BasicDBObject();
 	     BasicDBObject fields = new BasicDBObject();
 		 fields.put("menuTitle",1);	   
 		 fields.put("menuId", 1);
+		 fields.put("concernId",1);
 		 fields.put("_id", 0);
 
 	    DBCursor cursor = coll.find(query,fields);
-	    String menuDetails = new String();
-	    String menuIdFound  ;
+	    int menuIdFound  ;
 	    String menuTitleFound = null;
+	    String menuConcernFound = null;
 	    DBObject doc ;
-	     
+     
 	     try{
 
 	         while (cursor.hasNext()) {
+
 	        	 doc = cursor.next();
-	        	 menuIdFound = doc.get("menuId").toString();
+	        	 menuIdFound = Integer.parseInt(doc.get("menuId").toString());
 	        	 menuTitleFound = doc.get("menuTitle").toString();
+	        	 menuConcernFound = doc.get("concernId").toString();
+	        	 boolean menuFound = false;
 	        	 
-	        	 menuId[menuCount] = Integer.parseInt(menuIdFound);
-	        	 menuTitle[menuCount] = menuTitleFound;
-	        	 //System.out.println("Id is " + menuIdFound + " Title is " + menuTitleFound);
-	             menuCount = menuCount +1;
+	        	 int i = 0;
+	        	 while ( (i < menuCount) && (menuFound == false)){
+	        		 if (customMenu[i].menuId == menuIdFound ){
+	        			 menuFound = true;
+	        			 mongoMenu currentMenu = new mongoMenu();
+	        			 currentMenu = customMenu[i] ;
+	        			 currentMenu.menuItem[currentMenu.menuItemCount] = menuConcernFound;
+	        			 currentMenu.menuItemCount += 1;
+                         customMenu[i] = currentMenu;	      
+	        		 }
+	        	     i += 1;
+	        	 }	        	 
+	        	 if (! menuFound) {	        		 
+	        		 mongoMenu currentMenu = new mongoMenu();
+		        	 currentMenu.menuId = menuIdFound;
+		        	 currentMenu.menuTitle = menuTitleFound;
+		        	 currentMenu.menuItem[0] = menuConcernFound;
+		        	 currentMenu.menuItemCount = 1;	
+		        	 customMenu[menuCount] = currentMenu;
+		        	 menuCount = menuCount +1;	
+		        	                             
+	        	 }
 	         }
+	     } catch (Exception e){
+	    	System.out.println(e); 
 	     } finally {
 	         cursor.close();
 	     } 
-	     
-	     
-	     
-	     //clean up
-	     
+
 	     mongoClient.close();
-	   
+
 	   return menuCount;  
 
 }		
 	  
 
-		 
-	    
 }

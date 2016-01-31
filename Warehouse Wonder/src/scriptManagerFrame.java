@@ -23,11 +23,8 @@ public class scriptManagerFrame extends JFrame
   }
   
 	private static JButton buttonNewScript;
-	private static JButton buttonReadScript;
 	private static JButton buttonEditScript;	
-	private static JButton buttonShowAll;
-	private static Boolean visibleList = false ;
-	int selectedScriptId = 0;	
+	int selectedScriptId = 0;
 
 	public scriptManagerFrame() 
 	{
@@ -51,46 +48,17 @@ public class scriptManagerFrame extends JFrame
 
 				String selectedScriptName = new String();
 				selectedScriptName = scriptList.getSelectedValue().toString();
-				selectedScriptId = Integer.parseInt(selectedScriptName.substring(0,selectedScriptName.indexOf(":")));
+				selectedScriptId = Integer.parseInt(selectedScriptName.substring(0,selectedScriptName.indexOf(":")-1));
 			}
 		} );
-		
-		buttonShowAll = new JButton("Show all scripts");
-		buttonShowAll.addMouseListener(new MouseAdapter(){
-			public void mouseClicked(MouseEvent arg0) {
-				String allScripts[] = new String[100];
-				validationScript scriptList = new validationScript();
-				allScripts = scriptList.listall(); 
-				scriptListModel.clear();
 
-				//scriptList.addListSelectionListener();
-				
-				visibleList = !visibleList;
-				scriptListScrollPane.setVisible(visibleList);
-				
-				if (visibleList) { 
-					buttonShowAll.setText("Hide Scripts");
-					for(int i =0; i < scriptList.scriptCount; i++)
-					  {
-						 if (allScripts[i] != null )
-						 {
-					       scriptListModel.addElement(allScripts[i]);
-						 }
-					  }
-				}
-				else {
-					scriptListModel.clear();
-					buttonShowAll.setText("Show all scripts");
-				}
-			}		
-		});
-		
+		showScriptList(scriptListModel,scriptListScrollPane);
 
 		buttonNewScript = new JButton("Create new script");
 		buttonNewScript.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent arg0) {
 			ScriptEditFrame scriptMakerFrame = new ScriptEditFrame(true,0);	
-	
+			showScriptList(scriptListModel,scriptListScrollPane);
 			}
 		});
 		
@@ -101,50 +69,22 @@ public class scriptManagerFrame extends JFrame
 			if (selectedScriptId != 0)
 				{
 				editScriptId = selectedScriptId;
-				}
-			ScriptEditFrame scriptEditorFrame = new ScriptEditFrame(false,editScriptId);	
-	
+			
+			ScriptEditFrame scriptEditorFrame = new ScriptEditFrame(false,editScriptId);
 			}
-		});
-		
-		buttonReadScript = new JButton("Read a script");
-		buttonReadScript.addMouseListener(new MouseAdapter() {
+		}});
 
-			public void mouseClicked(MouseEvent arg0) {
-			String inputMessage;
-			int scriptError = 0;
-			inputMessage = JOptionPane.showInputDialog("which script");	 
-			if (inputMessage.length()>0 )
-			{
-				validationScript k = new validationScript();
-				//String currentScript;
-				scriptError = k.fetchScriptValue(Integer.parseInt(inputMessage));			
-			}
-			}
-		});
-		buttonReadScript.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 
 		SpringLayout scriptPanelayout = new SpringLayout();
 		
 		// put items on panel 
-		scriptManagerLayout.add(buttonShowAll,"1,5,left,center");
 		scriptManagerLayout.add(buttonNewScript, "1, 7, left, center");
-		scriptManagerLayout.add(buttonReadScript, "1, 9, left, center");
 		scriptManagerLayout.add(buttonEditScript, "1, 9, left, center");		
-		//scriptManagerLayout.add(scriptListScrollPane,"1,50, left,center");
+
 		scriptManagerLayout.add(scriptListScrollPane);
 
 		scriptPanelayout.putConstraint(SpringLayout.NORTH,buttonNewScript,5,SpringLayout.NORTH,scriptManagerLayout);
 		scriptPanelayout.putConstraint(SpringLayout.WEST,buttonNewScript,5,SpringLayout.WEST,scriptManagerLayout);
-
-		scriptPanelayout.putConstraint(SpringLayout.NORTH,buttonReadScript,5,SpringLayout.NORTH,scriptManagerLayout);
-		scriptPanelayout.putConstraint(SpringLayout.WEST,buttonReadScript,250,SpringLayout.WEST,scriptManagerLayout);
-
-		scriptPanelayout.putConstraint(SpringLayout.NORTH,buttonShowAll,50,SpringLayout.NORTH,scriptManagerLayout);
-		scriptPanelayout.putConstraint(SpringLayout.WEST,buttonShowAll,5,SpringLayout.WEST,scriptManagerLayout);	
 
 		scriptPanelayout.putConstraint(SpringLayout.NORTH,buttonEditScript,5,SpringLayout.NORTH,scriptManagerLayout);
 		scriptPanelayout.putConstraint(SpringLayout.WEST,buttonEditScript,150,SpringLayout.WEST,scriptManagerLayout);	
@@ -156,16 +96,29 @@ public class scriptManagerFrame extends JFrame
 
 		scriptManagerLayout.setLayout(scriptPanelayout);
 		
-		scriptListScrollPane.setVisible(false);
-		
 		// add panel to frame
-		//getContentPane().add(scriptManagerLayout, BorderLayout.NORTH);
 		getContentPane().add(scriptManagerLayout);
 		this.setVisible(true);
-
 		
 	}
+
+	private void showScriptList(DefaultListModel scriptListModel,JScrollPane scriptListScrollPane) {
+		String[][] allScripts = new String[100][2];	
+		validationScript scriptList = new validationScript();
 	
+		allScripts = scriptList.listall(); 
+		scriptListModel.clear();
+		
+		for(int i =0; i <= scriptList.scriptCount ; i++)
+		  {
+			 if (allScripts[i][0] != null )
+			 {	 
+			   scriptListModel.addElement(allScripts[i][0] + " : " + allScripts[i][1]);
+			 }
+		  }		
+	}
+	
+
 
 	
 }

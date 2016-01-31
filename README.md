@@ -2,7 +2,7 @@
 Tools for the data wrangler
 
 This is the start of a tool which will provide those maintaining and building data warehouses to manage the day-to-day activities 
-which go on when things go wrong.
+which go on when things go wrong, or even go right but you really need to be sure.
 
 It's the first application I've written in Java so some of this code will be awful and it's likely to get re-written a few
 times.

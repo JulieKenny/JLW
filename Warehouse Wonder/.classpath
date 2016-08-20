@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="forms-1.3.0.jar"/>
+	<classpathentry kind="lib" path="D:/Program Files/Java/jdk1.7.0_67/mongo-java-driver-2.13.0-rc0.jar"/>
+	<classpathentry kind="lib" path="lib/libloader-6.0.1.0-386.jar"/>
+	<classpathentry kind="lib" path="lib"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-core-6.0.1.0-386.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-database-model-6.0.1.0-386.jar"/>
+	<classpathentry kind="lib" path="lib/libbase-6.0.1.0-386.jar"/>
+	<classpathentry kind="lib" path="lib/libdocbundle-6.0.1.0-386.jar"/>
+	<classpathentry kind="lib" path="lib/libfonts-6.0.1.0-386.jar"/>
+	<classpathentry kind="lib" path="lib/libformat-6.0.1.0-386.jar"/>
+	<classpathentry kind="lib" path="lib/libformula-6.0.1.0-386.jar"/>
+	<classpathentry kind="lib" path="lib/libpixie-6.0.1.0-386.jar"/>
+	<classpathentry kind="lib" path="lib/librepository-6.0.1.0-386.jar"/>
+	<classpathentry kind="lib" path="lib/libserializer-6.0.1.0-386.jar"/>
+	<classpathentry kind="lib" path="lib/libswing-6.0.1.0-386.jar"/>
+	<classpathentry kind="lib" path="lib/libxml-6.0.1.0-386.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.3.jar"/>
+	<classpathentry kind="lib" path="lib/itext-2.1.7.jar"/>
+	<classpathentry kind="lib" path="lib/poi-3.12.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.38-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Julie/sqldriver/sqljdbc_4.0/enu/sqljdbc4.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

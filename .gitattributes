@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Auto detect text files and perform LF normalization
 * text=auto
 
@@ -15,3 +16,7 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
+=======
+# Disable LF normalization for all files
+* -text
+>>>>>>> 958d11bf09ebe73d69e9c1fe45b1d59ba6bdf8fa

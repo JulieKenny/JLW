@@ -1,10 +1,23 @@
+/*
+ * This code is part of JLW Warehouse Wonder
+ * Copyright (c) 2016-  Julie Kenny @ Softly Inspired  All rights reserved. 
+ *
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+ */
 package com.softlyinspired.jlw.connections;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-import javax.swing.ListSelectionModel;
 
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -28,12 +41,13 @@ public class connectionEditDialog  extends JDialog
 	private static JButton buttonCancel;
 	private static JButton buttonDelete;	
 	private static JButton buttonNew;
+	private static JButton buttonTest;
 	private static ConnectionSelector connectList;
 	
 	final String frameTitle = new String("Connection Editor");
 	
 	private static dbConnection currentConnection;
-	final JTextField driverText = new JTextField(20);
+	final JTextField driverText = new JTextField(25);
 	final JTextField urlText = new JTextField(80);	
 	final JTextField newName = new JTextField(10);
 	final JTextField userText = new JTextField(20);
@@ -48,7 +62,6 @@ public class connectionEditDialog  extends JDialog
 	
 	private static boolean isNew = false;
 	
-    //public connectionEditFrame(String passedName, boolean isNew)
 	public connectionEditDialog()
 	{
 	/**
@@ -62,20 +75,15 @@ public class connectionEditDialog  extends JDialog
 	this.setLocationRelativeTo(null); /* Put in centre of screen */
 	this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	JPanel cEditorPanel = new JPanel();
-	//* do something so this zeros
 
 	// Set the panel and add items				
 
-	/* 
-	 * Show if editing or creating
-	 */
    this.setTitle(frameTitle);		
    
    
    connectList = new ConnectionSelector(); 
    connectList.addItemListener(new ItemListener(){
 	   public void itemStateChanged(ItemEvent arg0){
-
 		   String connectName = connectList.getSelectedItem().toString(); 
 		   currentConnection = connectList.setSelection(connectName);
 
@@ -92,8 +100,16 @@ public class connectionEditDialog  extends JDialog
 	   }
 	   
    });
-   
-   driverText.setText(currentConnection.connectionDriver);
+
+	if (connectList.itemCount() > 0){
+		connectList.setSelectedItem(0);	
+		currentConnection = connectList.setSelection(connectList.getItemAt(0).toString());
+        driverText.setText(currentConnection.connectionDriver);
+        urlText.setText(currentConnection.connectionURL);
+        userText.setText(currentConnection.connectionUser);
+        passwordText.setText(currentConnection.connectionPassword);        
+	}
+
    
    /* New button */
    buttonNew = new JButton("New");
@@ -134,6 +150,13 @@ public class connectionEditDialog  extends JDialog
 			     }
 		    }else
 		       {intendedAction("delete new");  }
+		}
+	});
+	
+	buttonTest = new JButton("Test");
+	buttonTest.addMouseListener(new MouseAdapter(){
+		public void mouseClicked(MouseEvent arg0){
+			currentConnection.test();
 		}
 	});
 		
@@ -199,6 +222,7 @@ public class connectionEditDialog  extends JDialog
 	cEditorPanel.add(buttonCancel);
 	cEditorPanel.add(buttonDelete);		
 	cEditorPanel.add(buttonNew);
+	cEditorPanel.add(buttonTest);
 
 	cEditorPanel.add(nameLabel);
 
@@ -266,9 +290,14 @@ private void placeLayouts(SpringLayout connectionPaneLayout, JPanel cEditorPanel
 	connectionPaneLayout.putConstraint(SpringLayout.NORTH,passwordLabel,row[4],SpringLayout.NORTH,cEditorPanel);
 	connectionPaneLayout.putConstraint(SpringLayout.WEST,passwordLabel,5,SpringLayout.WEST,cEditorPanel);		
 	connectionPaneLayout.putConstraint(SpringLayout.NORTH,passwordText,row[4],SpringLayout.NORTH,cEditorPanel);
-	connectionPaneLayout.putConstraint(SpringLayout.WEST,passwordText,80,SpringLayout.WEST,passwordLabel);		
+	connectionPaneLayout.putConstraint(SpringLayout.WEST,passwordText,80,SpringLayout.WEST,passwordLabel);	
+	
+	connectionPaneLayout.putConstraint(SpringLayout.NORTH,buttonTest,row[4],SpringLayout.NORTH,cEditorPanel);
+	connectionPaneLayout.putConstraint(SpringLayout.EAST,buttonTest,-30,SpringLayout.EAST,cEditorPanel);	
+	
 }
 
+/* 
 private ArrayList<dbConnection> allConnections (){
 	int numberFound =0 ;
 	
@@ -309,7 +338,7 @@ private ArrayList<dbConnection> allConnections (){
 	
 	return connectionList;
 }
-
+*/
 
 /* Simplify messages */
 private void intendedAction(String actionName){

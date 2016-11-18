@@ -1,3 +1,21 @@
+/*
+ * This code is part of JLW Warehouse Wonder
+ * Copyright (c) 2016-  Julie Kenny @ Softly Inspired  All rights reserved. 
+ *
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+ */
 package com.softlyinspired.jlw.connections;
 
 import java.awt.event.ItemEvent;
@@ -15,6 +33,7 @@ import com.softlyinspired.jlw.mongodb.repoConnection;
 
 public class ConnectionSelector extends JComboBox<String> {
 	private  dbConnection currentConnection;
+	private  int listCount;
 	
 	public ConnectionSelector (){
 		
@@ -25,7 +44,7 @@ public class ConnectionSelector extends JComboBox<String> {
 		   cN = ac.get(i);
 		   this.addItem(cN.connectionName);
 		}
-		
+		listCount = i;
 		this.addItemListener(new ItemListener(){
 		   public void itemStateChanged(ItemEvent arg0){
 
@@ -35,7 +54,12 @@ public class ConnectionSelector extends JComboBox<String> {
 		   
 	   });		
 		
+
 	}
+	
+    public int itemCount (){
+    	return listCount;
+    };
 
 	public dbConnection setSelection(String connectionName){
 		dbConnection c = new dbConnection();
@@ -72,6 +96,8 @@ public class ConnectionSelector extends JComboBox<String> {
 		
 		return connectionList;
 	}
+
+
 
 
 }

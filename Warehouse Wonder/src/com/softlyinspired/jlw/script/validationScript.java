@@ -383,6 +383,7 @@ public class validationScript {
 		/** This will run a script and output the result to a file as csv **/
 		
 		int result = 0;
+		String tracking = "";
 		try {
 		    fetchScriptValue(scriptId);	
 		} catch (Exception e){
@@ -394,31 +395,41 @@ public class validationScript {
 	      String fileName = new String();
 	      fileName = getOutputFile(scriptId);
 	      File file = new File(fileName);
-
+	      
 		  // if file doesn't exists, then create it
 		  if (!file.exists()) {file.createNewFile();}
+		  tracking = "\n" + "output location set";
 
 		  FileWriter fw = new FileWriter(file.getAbsoluteFile());
 		  BufferedWriter bw = new BufferedWriter(fw);	
+		  
+		  tracking = tracking + "\n" + "Buffer opened";
 		
 		  dbConnection cn = new dbConnection();
 
 		  cn.fetchDetails(currentConnection);
-		  
+		  tracking = tracking + "\n" + "Connection details fetched";
+					  
 		  Class.forName(cn.connectionDriver);
+		  tracking = tracking + "\n" + "driver set";
 
 		  // Database credentials
 		  Connection conn = null;
 		  Statement stmt = null;
 
-		  conn = DriverManager.getConnection(cn.connectionURL,cn.connectionUser,cn.connectionPassword);	
+		  conn = DriverManager.getConnection(cn.connectionURL,cn.connectionUser,
+				               String.valueOf(cn.connectionPassword));	
 	      stmt = conn.createStatement();
+		  tracking = tracking + "\n" + "statement prepared";
 	      		  
 	      ResultSet rs = stmt.executeQuery(currentScriptText);	
 	      ResultSetMetaData rsmd = rs.getMetaData();
+		  tracking = tracking + "\n" + "result returned";
 	      	      
 	      int numberOfColumns = rsmd.getColumnCount();
 	      String columnName = new String("");
+		  tracking = tracking + "\n" + "result prep step 1";
+	      
 	      
 	      // Output column names
 	      for (int i = 1; i <= numberOfColumns; i++) {
@@ -426,6 +437,7 @@ public class validationScript {
 	        else {columnName = columnName + "," + rsmd.getColumnName(i);}
 	        }
 		  bw.write(columnName);
+		  tracking = tracking + ",2";
 		  
 	      String rowValues = new String("");
 	      while (rs.next()) {
@@ -436,6 +448,7 @@ public class validationScript {
 	    	  bw.newLine();
 	    	  bw.write(rowValues);
 	      }
+		  tracking = tracking + ",3";
 
 		  bw.close();
 	      rs.close();
@@ -444,7 +457,7 @@ public class validationScript {
 	      
 		} catch(Exception e){
 			result = 1;
-			JLWUtilities.scriptErrorMessage(" Error attempting to run script");
+			JLWUtilities.scriptErrorMessage(tracking + "\n" + "Error running script"  );
 		}
 
 	  return result;

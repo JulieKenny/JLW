@@ -52,7 +52,8 @@ public class connectionEditDialog  extends JDialog
 	final JTextField newName = new JTextField(10);
 	final JTextField userText = new JTextField(20);
 	final JPasswordField passwordText = new JPasswordField(20);
-		
+	//final JTextField passwordText = new JTextField(20);
+	
 	final JLabel nameLabel = new JLabel("Name");	
 	final JLabel driverLabel = new JLabel("Driver");	
 	final JLabel urlLabel = new JLabel("Url ");	
@@ -90,12 +91,12 @@ public class connectionEditDialog  extends JDialog
 		   String cDriver = currentConnection.connectionDriver;
 		   String cURL = currentConnection.connectionURL;
 		   String cUser = currentConnection.connectionUser;
-		   String cPass = currentConnection.connectionPassword;
+		   String cPass = String.valueOf(currentConnection.connectionPassword);
+		   JLWUtilities.scriptInfoMessage(cPass);
 		   driverText.setText(cDriver);
 		   urlText.setText(cURL);
 		   userText.setText(cUser);
 		   passwordText.setText(cPass);
-
 		   revalidate();
 	   }
 	   
@@ -107,7 +108,9 @@ public class connectionEditDialog  extends JDialog
         driverText.setText(currentConnection.connectionDriver);
         urlText.setText(currentConnection.connectionURL);
         userText.setText(currentConnection.connectionUser);
-        passwordText.setText(currentConnection.connectionPassword);        
+        passwordText.setText(currentConnection.connectionPassword.toString());
+
+
 	}
 
    
@@ -199,8 +202,9 @@ public class connectionEditDialog  extends JDialog
 		     {showError("password is required");
 		      errorCount++;
 		     }
-		    else {currentConnection.connectionPassword = passwordText.getPassword().toString();}
-		
+		    else { currentConnection.connectionPassword = String.valueOf(passwordText.getPassword());
+		    	   }
+			 
             if (errorCount == 0 ){
             	if (!isNew  ) 
             	     { currentConnection.updateExisting();
@@ -297,48 +301,7 @@ private void placeLayouts(SpringLayout connectionPaneLayout, JPanel cEditorPanel
 	
 }
 
-/* 
-private ArrayList<dbConnection> allConnections (){
-	int numberFound =0 ;
-	
-	ArrayList<dbConnection> connectionList = new ArrayList<dbConnection>();
-	try {
-		MongoClient mongoClient = new MongoClient("localhost",27017);
-	    DB db = mongoClient.getDB("local");
-	    
-	    DBCollection coll = db.getCollection("connections");
-	    DBObject doc ;	
-		
-        try {	   
-        	   DBCursor allConnections = coll.find();
-        	   numberFound = allConnections.count();
 
-		       for(int i =0; i < (numberFound); i++){
-	        	 doc = allConnections.next();
-	        	 dbConnection a = new dbConnection();
-	        	 a.connectionName = doc.get("name").toString();
-	        	 a.connectionDriver = doc.get("driver").toString();
-	        	 a.connectionURL = doc.get("url").toString();
-	        	 try { a.connectionPassword = doc.get("password").toString();
-	        	   } catch (Exception e) { a.connectionPassword = "";};
-	        	 try { a.connectionUser = doc.get("user").toString();
-	        	   } catch (Exception e) { a.connectionUser = "";};
-	        	 
-	        	 connectionList.add(a);
-        	 }       	
-	    }
-        catch (Exception e){
-        	showError("There was nothing there");
-        }
-        mongoClient.close();
-	}
-	catch (Exception e) {
-		showError("General Error in listing");
-	}
-	
-	return connectionList;
-}
-*/
 
 /* Simplify messages */
 private void intendedAction(String actionName){

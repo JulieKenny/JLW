@@ -116,7 +116,6 @@ public class dbConnection {
        try {
 			// search for the id
 		    BasicDBObject updateQuery = new BasicDBObject(); 	    
-			
 		    BasicDBObject searchQuery = new BasicDBObject().append("name", connectionName);		
 		    DBObject changes = new BasicDBObject().append("driver",connectionDriver)
 		    		                              .append("url", connectionURL)
@@ -153,7 +152,8 @@ public class dbConnection {
 		
 		try {
 			connectionPassword = currentConnectionDoc.get("password").toString();
-		} catch (Exception e){connectionPassword = "";}
+			//connectionPassword = Arrays(currentConnectionDoc.get("password").toCharArray(););
+		} catch (Exception e){connectionPassword = null;}
 
 		return this;
 
@@ -179,15 +179,16 @@ public class dbConnection {
 		  Connection conn = null;
 		  Statement stmt = null;
 		try {
-			  conn = DriverManager.getConnection(this.connectionURL,this.connectionUser,this.connectionPassword);	
-		      stmt = conn.createStatement();
-		      		  
-		      //stmt.executeQuery("select 1");	
+
+		      String passwordUse = this.connectionPassword.toString();
+			  conn = DriverManager.getConnection(this.connectionURL,this.connectionUser,
+					               String.valueOf(connectionPassword));	
+			  stmt = conn.createStatement();	
 		      JLWUtilities.scriptInfoMessage("Connection Successful");
 		      return true;
 
 		} catch (Exception e) {
-			JLWUtilities.scriptErrorMessage("Connection Failed : " + e);
+			JLWUtilities.scriptErrorMessage("Connection Failed : " + "\n" + e);
 			return false;			
 		}
 	}

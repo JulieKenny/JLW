@@ -92,7 +92,6 @@ public class connectionEditDialog  extends JDialog
 		   String cURL = currentConnection.connectionURL;
 		   String cUser = currentConnection.connectionUser;
 		   String cPass = String.valueOf(currentConnection.connectionPassword);
-		   JLWUtilities.scriptInfoMessage(cPass);
 		   driverText.setText(cDriver);
 		   urlText.setText(cURL);
 		   userText.setText(cUser);
